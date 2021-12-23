@@ -1,0 +1,85 @@
+---
+title: "Visualising Covid-19"
+author: "Sofya Rbinovich"
+date: "22/12/2021"
+output: pdf_document
+---
+# Introduction 
+
+Coronavirus disease 2019 (COVID-19) is a contagious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first known case was identified in Wuhan, China, in December 2019. The disease has since spread worldwide, leading to an ongoing pandemic.The disease has since spread worldwide, leading to an ongoing pandemic.
+
+Symptoms of COVID-19 are variable, but often include fever, cough, headache, fatigue, breathing difficulties, and loss of smell and taste. Symptoms may begin one to fourteen days after exposure to the virus. At least a third of people who are infected do not develop noticeable symptoms. Of those people who develop symptoms noticeable enough to be classed as patients, most (81%) develop mild to moderate symptoms (up to mild pneumonia), while 14% develop severe symptoms (dyspnea, hypoxia, or more than 50% lung involvement on imaging), and 5% suffer critical symptoms (respiratory failure, shock, or multiorgan dysfunction). Older people are at a higher risk of developing severe symptoms. Some people continue to experience a range of effects (long COVID) for months after recovery, and damage to organs has been observed. Multi-year studies are underway to further investigate the long-term effects of the disease.
+
+COVID-19 transmits when people breathe in air contaminated by droplets and small airborne particles containing the virus. The risk of breathing these in is highest when people are in close proximity, but they can be inhaled over longer distances, particularly indoors. Transmission can also occur if splashed or sprayed with contaminated fluids in the eyes, nose or mouth, and, rarely, via contaminated surfaces. People remain contagious for up to 20 days, and can spread the virus even if they do not develop symptoms.
+
+![Covid-19 structure](/Users/sofyarabinovich/Desktop/Programming/R-professional-certificate/Visualizing-COVID-19/Coronavirus._SARS-CoV-2.png){width=30%, height=30%}
+
+This project visualises COVID-19 data from the first several weeks of the outbreak to see at what poin it became a pandemic. 
+
+# Librarier used 
+readr - to read csv files.
+
+dplyr -  primarily a set of functions designed to enable dataframe manipulation in an intuitive, user-friendly way.
+
+ggplot2 - open-source data visualization package for the statistical programming.
+```{r, echo=FALSE, message=FALSE}
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
+# Load files 
+```{r, message=FALSE, echo=FALSE}
+confirmed_cases_worldwide <- read_csv("/Users/sofyarabinovich/Desktop/Programming/R-professional-certificate/Visualizing-COVID-19/datasets/confirmed_cases_worldwide.csv")
+confirmed_cases_china_vs_world <- read_csv("/Users/sofyarabinovich/Desktop/Programming/R-professional-certificate/Visualizing-COVID-19/datasets/confirmed_cases_china_vs_world.csv")
+confirmed_cases_by_country <- read_csv("/Users/sofyarabinovich/Desktop/Programming/R-professional-certificate/Visualizing-COVID-19/datasets/confirmed_cases_by_country.csv")
+confirmed_cases_top7_outside_china <- read_csv("/Users/sofyarabinovich/Desktop/Programming/R-professional-certificate/Visualizing-COVID-19/datasets/confirmed_cases_top7_outside_china.csv")
+```
+```{r, show data}
+confirmed_cases_worldwide
+confirmed_cases_china_vs_world
+confirmed_cases_by_country
+confirmed_cases_top7_outside_china
+```
+
+## Confirmed cases throughout the world
+
+```{r, echo=FALSE,out.width="60%", out.height="60%", fig.align='center', fig.cap="Cases worldwide"}
+ggplot(confirmed_cases_worldwide, aes(x = date, y = cum_cases)) + 
+  geom_line() +
+  ylab("Cumulative confirmed cases")
+```
+
+##  China compared to the rest of the world
+
+Early on in the outbreak, the COVID-19 cases were primarily centered in China. During the early stages of the outbreak, the number of cases doubled approximately every seven and a half days. In early and mid-January 2020, the virus spread to other Chinese provinces, helped by the Chinese New Year migration and Wuhan being a transport hub and major rail interchange. On 20 January, China reported nearly 140 new cases in one day, including two people in Beijing and one in Shenzhen. Later official data shows 6,174 people had already developed symptoms by then,and more may have been infected. A report in The Lancet on 24 January indicated human transmission, strongly recommended personal protective equipment for health workers, and said testing for the virus was essential due to its "pandemic potential".On 30 January, the WHO declared the coronavirus a Public Health Emergency of International Concern. By this time, the outbreak spread by a factor of 100 to 200 times.
+
+Italy had its first confirmed cases on 31 January 2020, two tourists from China. Italy overtook China as the country with the most deaths on 19 March 2020. By 26 March the United States had overtaken China and Italy with the highest number of confirmed cases in the world. Research on coronavirus genomes indicates the majority of COVID-19 cases in New York came from European travellers, rather than directly from China or any other Asian country. Retesting of prior samples found a person in France who had the virus on 27 December 2019, and a person in the United States who died from the disease on 6 February 2020.
+
+```{r, echo=FALSE,out.width="60%", out.height="60%", fig.align='center',fig.cap="Cases in China and in the rest of the world"}
+plt_cum_confirmed_cases_china_vs_world <- 
+  ggplot(confirmed_cases_china_vs_world) +
+  geom_line(aes(x = date, y = cum_cases, group = is_china, color = is_china)) +
+  ylab("Cumulative confirmed cases")
+who_events <- tribble(
+  ~ date, ~ event,
+  "2020-01-30", "Global health\nemergency declared",
+  "2020-03-11", "Pandemic\ndeclared",
+  "2020-02-13", "China reporting\nchange"
+) %>%
+  mutate(date = as.Date(date))
+plt_cum_confirmed_cases_china_vs_world +
+  geom_vline(data=who_events, aes(xintercept=date), linetype="dashed") +
+  geom_text(data = who_events, aes(x=date, label=event), y=1e5)
+```
+
+## Hardest hit countries as of Mid-March 2020
+
+Even though the outbreak was first identified in China, there is only one country from East Asia (South Korea) in the above table. Four of the listed countries (France, Germany, Italy, and Spain) are in Europe and share borders.
+
+```{r, echo=FALSE,out.width="60%", out.height="60%", fig.align='center', fig.cap="Countried with the highest confirmed cases at the mid March 2020"}
+ggplot(confirmed_cases_top7_outside_china, aes(x=date, y=cum_cases, group=country, color=country))+
+  geom_line()+
+  ylab('Cumulative confirmed cases')
+```
+
