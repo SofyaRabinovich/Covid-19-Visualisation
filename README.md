@@ -2,7 +2,7 @@
 
 ## Introduction 
 
-Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus. Covid-19 is a cause of the current pandemic, but it wasn't like this at the start. This project visualises COVID-19 data from the first several weeks of the outbreak to see at what poin it became a pandemic. 
+Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus. Covid-19 is a cause of the current pandemic, but it wasn't like this at the start. This project visualises COVID-19 data from the first several weeks of the outbreak to see at what poin it became a pandemic. (Project done using DataCamp)
 
 ### COVID-19
 Coronavirus disease 2019 (COVID-19) is a contagious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2). The first known case was identified in Wuhan, China, in December 2019. The disease has since spread worldwide, leading to an ongoing pandemic.The disease has since spread worldwide, leading to an ongoing pandemic.
